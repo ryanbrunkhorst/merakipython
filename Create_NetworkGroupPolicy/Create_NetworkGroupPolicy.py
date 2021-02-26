@@ -1,0 +1,17 @@
+import requests
+import csv
+
+with open("networkids.csv", "r") as a_file:
+    for line in a_file:
+        networkid = line.strip()
+        url = "https://api.meraki.com/api/v0/networks/%s/groupPolicies" %(networkid) 
+        payload="{\r\n  \"name\": \"GROUPPOLICYNAME\",\r\n  \"scheduling\": {\r\n    \"enabled\": false,\r\n    \"monday\": {\r\n      \"active\": true,\r\n      \"from\": \"00:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"tuesday\": {\r\n      \"active\": true,\r\n      \"from\": \"00:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"wednesday\": {\r\n      \"active\": true,\r\n      \"from\": \"00:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"thursday\": {\r\n      \"active\": true,\r\n      \"from\": \"00:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"friday\": {\r\n      \"active\": true,\r\n      \"from\": \"00:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"saturday\": {\r\n      \"active\": true,\r\n      \"from\": \"0:00\",\r\n      \"to\": \"24:00\"\r\n    },\r\n    \"sunday\": {\r\n      \"active\": true,\r\n      \"from\": \"0:00\",\r\n      \"to\": \"24:00\"\r\n    }\r\n  },\r\n  \"bandwidth\": {\r\n    \"settings\": \"ignore\",\r\n    \"bandwidthLimits\": {\r\n      \"limitUp\": 25600,\r\n      \"limitDown\": 25600\r\n    }\r\n  },\r\n  \"firewallAndTrafficShaping\": {\r\n    \"settings\": \"custom\",\r\n    \"trafficShapingRules\": [],\r\n    \"l3FirewallRules\": [\r\n    {\r\n\t\t\"comment\": \"COMPUTERNAME\",\r\n\t\t\"policy\": \"allow\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"IPADDRESS/32\"\r\n\t},\r\n\t{\r\n\t\t\"comment\": \"COMPUTERNAME\",\r\n\t\t\"policy\": \"allow\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"IPADDRESS/32\"\r\n\t},\r\n\t{\r\n\t\t\"comment\": \"COMPUTERNAME\",\r\n\t\t\"policy\": \"allow\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"IPADDRESS/32\"\r\n\t},\r\n\t{\r\n\t\t\"comment\": \"Deny RFC1918\",\r\n\t\t\"policy\": \"deny\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"192.168.0.0/16\"\r\n\t},\r\n\t{\r\n\t\t\"comment\": \"Deny RFC1918\",\r\n\t\t\"policy\": \"deny\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"172.16.0.0/12\"\r\n\t},\r\n\t{\r\n\t\t\"comment\": \"Deny RFC1918\",\r\n\t\t\"policy\": \"deny\",\r\n\t\t\"protocol\": \"any\",\r\n\t\t\"destPort\": \"Any\",\r\n\t\t\"destCidr\": \"10.0.0.0/8\"\r\n\t}    \r\n    ],\r\n    \"l7FirewallRules\": []\r\n  },\r\n  \"contentFiltering\": {\r\n    \"allowedUrlPatterns\": {\r\n      \"settings\": \"network default\",\r\n      \"patterns\": []\r\n    },\r\n    \"blockedUrlPatterns\": {\r\n      \"settings\": \"network default\",\r\n      \"patterns\": []\r\n    },\r\n    \"blockedUrlCategories\": {\r\n      \"settings\": \"network default\",\r\n      \"categories\": []\r\n    }\r\n  },\r\n  \"splashAuthSettings\": \"bypass\",\r\n  \"vlanTagging\": {\r\n    \"settings\": \"network default\",\r\n    \"vlanId\": \"1\"\r\n  },\r\n  \"bonjourForwarding\": {\r\n    \"settings\": \"ignore\",\r\n    \"rules\": []\r\n  }\r\n}\r\n\r\n"
+        headers = {
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+          'X-Cisco-Meraki-API-Key': 'SECRET'
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        print(response.text)
